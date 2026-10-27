@@ -16,7 +16,7 @@ import plotly.express as px
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from app.utils import inject_custom_css
+from app.utils import inject_custom_css, PROCESSED_DIR
 
 st.set_page_config(page_title="Player Intelligence | PKL Analytics", page_icon="🏹", layout="wide")
 inject_custom_css()
@@ -37,7 +37,8 @@ CLUSTER_LABELS = {
 
 @st.cache_data
 def load_clusters():
-    p = pd.read_parquet("data/processed/player_clusters.parquet")
+    cluster_file = os.path.join(PROCESSED_DIR, "player_clusters.parquet")
+    p = pd.read_parquet(cluster_file)
     p["archetype_label"] = p["cluster_id"].map(lambda x: CLUSTER_LABELS.get(x, (f"Cluster {x}", "#888"))[0])
     p["archetype_color"] = p["cluster_id"].map(lambda x: CLUSTER_LABELS.get(x, (f"Cluster {x}", "#888"))[1])
     return p

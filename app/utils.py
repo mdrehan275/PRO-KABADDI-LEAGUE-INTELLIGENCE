@@ -11,7 +11,16 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
-PROCESSED_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "processed")
+# Fallback search paths for Streamlit Cloud and local execution
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CANDIDATE_DIRS = [
+    os.path.join(BASE_DIR, "data", "processed"),
+    os.path.join(BASE_DIR, "Data", "processed"),
+    os.path.abspath("data/processed"),
+    os.path.abspath("Data/processed"),
+]
+
+PROCESSED_DIR = next((d for d in CANDIDATE_DIRS if os.path.isdir(d)), CANDIDATE_DIRS[0])
 
 # Canonical Color Palette
 PKL_ORANGE = "#FF6F00"

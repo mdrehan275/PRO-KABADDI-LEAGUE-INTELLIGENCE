@@ -15,7 +15,7 @@ import plotly.graph_objects as go
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from app.utils import inject_custom_css
+from app.utils import inject_custom_css, PROCESSED_DIR
 from src.analytics.momentum import build_match_momentum, count_lead_changes
 
 st.set_page_config(page_title="Match Momentum | PKL Analytics", page_icon="📈", layout="wide")
@@ -29,7 +29,8 @@ lead changes, comeback victories, and scoring dominance patterns within individu
 
 @st.cache_data
 def load_match_catalog():
-    df = pd.read_parquet("data/processed/fact_matches.parquet")
+    matches_file = os.path.join(PROCESSED_DIR, "fact_matches.parquet")
+    df = pd.read_parquet(matches_file)
     official = df[(df["is_official_pkl"] == True) & (df["is_completed"] == True)].copy()
     official["label"] = (
         official["team_a_name"] + " vs " + official["team_b_name"] +
