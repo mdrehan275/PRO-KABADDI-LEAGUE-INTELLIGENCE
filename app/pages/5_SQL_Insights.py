@@ -21,6 +21,57 @@ st.markdown("Execute advanced relational SQL queries directly against the produc
 
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "pkl_analytics.db")
 SQL_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "sql", "analysis_queries.sql")
+SCHEMA_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "sql", "schema.sql")
+
+
+@st.cache_resource(show_spinner="Initializing in-memory analytical warehouse...")
+def get_database_connection():
+    """
+    Returns a connection to SQLite. If data/pkl_analytics.db doesn't exist on disk
+    (e.g. freshly deployed to Streamlit Cloud), it automatically rebuilds it from the
+    preprocessed Parquet tables so all 22 SQL queries work immediately with zero configuration.
+    """
+    import sqlite3
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    
+    # Check if database file exists and contains tables
+    needs_init = True
+    if os.path.exists(DB_PATH):
+        try:
+            c = sqlite3.connect(DB_PATH)
+            tables = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table';", c)
+            c.close()
+            if "dim_seasons" in tables["name"].values:
+                needs_init = False
+        except Exception:
+            needs_init = True
+
+    if needs_init:
+        # Load tables from parquet
+        from app.utils import PROCESSED_DIR
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        
+        # 1. Apply schema if available
+        if os.path.exists(SCHEMA_FILE):
+            with open(SCHEMA_FILE, "r", encoding="utf-8") as f:
+                cursor.executescript(f.read())
+            conn.commit()
+
+        # 2. Populate tables from parquet
+        table_names = [
+            "dim_seasons", "dim_teams", "dim_venues", "dim_players",
+            "fact_matches", "fact_team_match", "fact_player_match", "fact_events"
+        ]
+        for tbl in table_names:
+            pq_file = os.path.join(PROCESSED_DIR, f"{tbl}.parquet")
+            if os.path.exists(pq_file):
+                df_tbl = pd.read_parquet(pq_file)
+                df_tbl.to_sql(tbl, conn, if_exists="replace", index=False)
+        conn.commit()
+        conn.close()
+
+    return DB_PATH
 
 tab1, tab2, tab3 = st.tabs(["🚀 Interactive SQL Explorer", "📐 KPI Math Definitions", "🛡️ Data Quality & Contracts"])
 
@@ -85,7 +136,8 @@ with tab1:
             st.error("Only read-only SELECT queries are permitted on this analytical warehouse.")
         else:
             try:
-                conn = sqlite3.connect(DB_PATH)
+                db_file = get_database_connection()
+                conn = sqlite3.connect(db_file)
                 t0 = time.time()
                 result_df = pd.read_sql_query(user_sql, conn)
                 elapsed_ms = (time.time() - t0) * 1000

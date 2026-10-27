@@ -14,8 +14,12 @@ import numpy as np
 import plotly.graph_objects as go
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from app.utils import inject_custom_css, PROCESSED_DIR
+try:
+    from app.utils import inject_custom_css, PROCESSED_DIR
+except ImportError:
+    from utils import inject_custom_css, PROCESSED_DIR
 from src.analytics.momentum import build_match_momentum, count_lead_changes
 
 st.set_page_config(page_title="Match Momentum | PKL Analytics", page_icon="📈", layout="wide")

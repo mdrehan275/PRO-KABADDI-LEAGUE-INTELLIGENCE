@@ -15,8 +15,12 @@ import plotly.graph_objects as go
 import plotly.express as px
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from app.utils import inject_custom_css, PROCESSED_DIR
+try:
+    from app.utils import inject_custom_css, PROCESSED_DIR
+except ImportError:
+    from utils import inject_custom_css, PROCESSED_DIR
 
 st.set_page_config(page_title="Player Intelligence | PKL Analytics", page_icon="🏹", layout="wide")
 inject_custom_css()

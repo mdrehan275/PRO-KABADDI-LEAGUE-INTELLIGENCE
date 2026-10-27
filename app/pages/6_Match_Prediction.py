@@ -15,10 +15,14 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 
-# Ensure project root in sys.path
+# Ensure both project root and app dir in sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from app.utils import inject_custom_css, load_dim_teams, load_dim_venues
+try:
+    from app.utils import inject_custom_css, load_dim_teams, load_dim_venues
+except ImportError:
+    from utils import inject_custom_css, load_dim_teams, load_dim_venues
 from src.models.predict import MatchPredictor
 
 st.set_page_config(page_title="Match Prediction | PKL Analytics", page_icon="🎯", layout="wide")

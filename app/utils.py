@@ -22,15 +22,6 @@ CANDIDATE_DIRS = [
 
 PROCESSED_DIR = next((d for d in CANDIDATE_DIRS if os.path.isdir(d)), CANDIDATE_DIRS[0])
 
-# Canonical Color Palette
-PKL_ORANGE = "#FF6F00"
-PKL_NAVY = "#0D47A1"
-PKL_TEAL = "#00897B"
-PKL_RED = "#D32F2F"
-PKL_GREEN = "#388E3C"
-PKL_GOLD = "#FBC02D"
-PKL_SLATE = "#37474F"
-
 
 @st.cache_data(show_spinner=False)
 def load_all_data():
@@ -53,6 +44,20 @@ def load_all_data():
         else:
             raise FileNotFoundError(f"Table {tbl} not found in {PROCESSED_DIR}")
     return data
+
+# Canonical Color Palette
+PKL_ORANGE = "#FF6F00"
+PKL_NAVY = "#0D47A1"
+PKL_TEAL = "#00897B"
+PKL_RED = "#D32F2F"
+PKL_GREEN = "#388E3C"
+PKL_GOLD = "#FBC02D"
+PKL_SLATE = "#37474F"
+
+
+def inject_custom_css():
+    """Alias for apply_custom_css for consistent cross-module imports."""
+    apply_custom_css()
 
 
 def apply_custom_css():
@@ -116,6 +121,20 @@ def apply_custom_css():
             }
         </style>
     """, unsafe_allow_html=True)
+
+
+@st.cache_data(show_spinner=False)
+def load_dim_teams() -> pd.DataFrame:
+    """Helper to load dim_teams table directly."""
+    data = load_all_data()
+    return data["dim_teams"]
+
+
+@st.cache_data(show_spinner=False)
+def load_dim_venues() -> pd.DataFrame:
+    """Helper to load dim_venues table directly."""
+    data = load_all_data()
+    return data["dim_venues"]
 
 
 def format_plotly_chart(fig: go.Figure, title: str = "", height: int = 420) -> go.Figure:
