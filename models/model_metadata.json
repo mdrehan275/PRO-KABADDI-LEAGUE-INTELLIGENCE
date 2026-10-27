@@ -1,0 +1,66 @@
+{
+  "best_candidate": "logistic_regression",
+  "feature_count": 28,
+  "feature_names": [
+    "diff_prior_win_pct",
+    "diff_prior_avg_pts",
+    "diff_prior_avg_conceded",
+    "diff_prior_diff",
+    "diff_raid_rate",
+    "diff_tackle_rate",
+    "diff_avg_allouts",
+    "diff_l5_win_pct",
+    "diff_l5_avg_pts",
+    "diff_l5_avg_conceded",
+    "diff_l5_differential",
+    "team_a_prior_win_pct",
+    "team_b_prior_win_pct",
+    "team_a_prior_avg_pts",
+    "team_b_prior_avg_pts",
+    "team_a_prior_raid_rate",
+    "team_b_prior_raid_rate",
+    "team_a_prior_tackle_rate",
+    "team_b_prior_tackle_rate",
+    "team_a_l5_win_pct",
+    "team_b_l5_win_pct",
+    "team_a_l5_diff",
+    "team_b_l5_diff",
+    "h2h_team_a_win_pct",
+    "h2h_team_a_avg_margin",
+    "diff_rest_days",
+    "team_a_is_home",
+    "team_b_is_home"
+  ],
+  "train_samples": 344,
+  "val_samples": 124,
+  "test_samples": 79,
+  "validation_scores": {
+    "baseline_dummy": {
+      "val_accuracy": 0.5080645161290323,
+      "val_roc_auc": 0.5,
+      "val_brier": 0.49193548387096775,
+      "val_log_loss": 1.0
+    },
+    "logistic_regression": {
+      "val_accuracy": 0.5645161290322581,
+      "val_roc_auc": 0.653655997918293,
+      "val_brier": 0.23329912437413544,
+      "val_log_loss": 0.6551410426361984
+    },
+    "random_forest": {
+      "val_accuracy": 0.5806451612903226,
+      "val_roc_auc": 0.6505334374186833,
+      "val_brier": 0.24133447651212642,
+      "val_log_loss": 0.6744909714500444
+    },
+    "hist_gradient_boosting": {
+      "val_accuracy": 0.5725806451612904,
+      "val_roc_auc": 0.6213895394223263,
+      "val_brier": 0.244966872372035,
+      "val_log_loss": 0.6852631888341634
+    }
+  },
+  "train_target_mean": 0.42441860465116277,
+  "val_target_mean": 0.49193548387096775,
+  "test_target_mean": 0.6708860759493671
+}

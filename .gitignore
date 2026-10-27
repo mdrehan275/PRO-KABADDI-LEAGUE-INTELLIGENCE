@@ -1,0 +1,72 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# IDE / Editor configuration
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# SQLite database files (can be regenerated)
+*.db
+*.sqlite3
+
+# Large generated data / cache
+.cache/
+
+# Raw source data — too large for GitHub (regenerate via pipeline docs)
+/Data/
+/DS_events.csv
+/DS_match.csv
+/DS_players.csv
+/DS_team.csv
+
+# Processed CSVs are large duplicates of parquets
+/data/processed/*.csv
+
+# BUT include parquets (negate the Data/ case-insensitive match on Windows)
+!/data/
+!/data/processed/
+!/data/processed/*.parquet
+
+# pytest cache
+.pytest_cache/
